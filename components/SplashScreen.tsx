@@ -14,7 +14,8 @@ export function SplashScreen({ children }: SplashScreenProps) {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const response = await fetch('/api/health')
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
+        const response = await fetch(`${apiUrl}/api/health`)
         if (response.status === 200) {
           // Start fade out animation
           setFadeOut(true)
