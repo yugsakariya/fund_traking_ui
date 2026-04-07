@@ -16,22 +16,30 @@ export function SplashScreen({ children }: SplashScreenProps) {
     let retryTimeout: NodeJS.Timeout
 
     const checkHealth = async () => {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
+      console.log('[v0] Checking health at:', `${apiUrl}/api/health`)
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
         const response = await fetch(`${apiUrl}/api/health`)
+        console.log('[v0] Health check response status:', response.status)
         if (response.status === 200) {
           // Start fade out animation
+          console.log('[v0] Health check passed, fading out splash screen')
           setFadeOut(true)
           // Wait for animation to complete before hiding
           setTimeout(() => {
-            if (isMounted) setIsLoading(false)
+            if (isMounted) {
+              console.log('[v0] Splash screen hidden, showing app')
+              setIsLoading(false)
+            }
           }, 500)
         } else {
           // Retry after a delay if not 200
+          console.log('[v0] Health check failed, retrying in 1s')
           retryTimeout = setTimeout(checkHealth, 1000)
         }
-      } catch {
+      } catch (error) {
         // Retry after a delay on error
+        console.log('[v0] Health check error:', error, 'retrying in 1s')
         retryTimeout = setTimeout(checkHealth, 1000)
       }
     }
@@ -44,6 +52,7 @@ export function SplashScreen({ children }: SplashScreenProps) {
     }
   }, [])
 
+  // Show splash screen while loading - don't render children at all
   if (isLoading) {
     return (
       <div
@@ -88,5 +97,6 @@ export function SplashScreen({ children }: SplashScreenProps) {
     )
   }
 
+  // Only render children after health check passes and fade-out is complete
   return <>{children}</>
 }
