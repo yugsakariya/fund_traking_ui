@@ -15,22 +15,11 @@ export function SplashScreen({ children }: SplashScreenProps) {
     let isMounted = true
     let retryTimeout: NodeJS.Timeout
 
-    // Maximum wait time (10 seconds) before showing app anyway
-    const maxWaitTimeout = setTimeout(() => {
-      if (isMounted && isLoading) {
-        setFadeOut(true)
-        setTimeout(() => {
-          if (isMounted) setIsLoading(false)
-        }, 500)
-      }
-    }, 10000)
-
     const checkHealth = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
         const response = await fetch(`${apiUrl}/api/health`)
         if (response.status === 200) {
-          clearTimeout(maxWaitTimeout)
           // Start fade out animation
           setFadeOut(true)
           // Wait for animation to complete before hiding
@@ -51,10 +40,9 @@ export function SplashScreen({ children }: SplashScreenProps) {
 
     return () => {
       isMounted = false
-      clearTimeout(maxWaitTimeout)
       clearTimeout(retryTimeout)
     }
-  }, [isLoading])
+  }, [])
 
   if (isLoading) {
     return (
