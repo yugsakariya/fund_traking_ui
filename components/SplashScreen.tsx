@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Spinner } from '@/components/ui/spinner'
 
 interface SplashScreenProps {
   children: React.ReactNode
@@ -57,40 +56,42 @@ export function SplashScreen({ children }: SplashScreenProps) {
   if (isLoading) {
     return (
       <div
-        className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-background transition-opacity duration-500 ${
+        className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900 transition-opacity duration-500 ${
           fadeOut ? 'opacity-0' : 'opacity-100'
         }`}
       >
         <div className="flex flex-col items-center gap-6">
-          {/* Logo/Icon */}
-          <div className="flex size-20 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+          {/* Logo/Icon - matches app header */}
+          <div className="w-20 h-20 bg-yellow-400 rounded-2xl flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
+              stroke="#111827"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="size-10"
+              className="w-10 h-10"
             >
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+              <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+              <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
             </svg>
           </div>
 
           {/* App Name */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-foreground">
-              Group Fund Tracker
+            <h1 className="text-2xl font-bold text-white">
+              Group Fund
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-gray-400">
               Managing your funds with ease
             </p>
           </div>
 
-          {/* Loading Spinner */}
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Spinner className="size-5" />
+          {/* Loading Spinner - yellow to match accent */}
+          <div className="flex items-center gap-2 text-gray-400">
+            <span className="w-5 h-5 border-2 border-gray-700 border-t-yellow-400 rounded-full animate-spin" />
             <span className="text-sm">Loading...</span>
           </div>
         </div>
