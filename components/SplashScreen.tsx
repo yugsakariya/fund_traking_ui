@@ -1,56 +1,57 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 
 interface SplashScreenProps {
   children: React.ReactNode
 }
 
+const HEALTH_CHECK_INTERVAL = 1000 // 1 second between retries
+const HEALTH_ENDPOINT = '/api/health'
+
 export function SplashScreen({ children }: SplashScreenProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
 
+  const checkHealth = useCallback(async (signal: AbortSignal): Promise<boolean> => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
+    try {
+      const response = await fetch(`${apiUrl}${HEALTH_ENDPOINT}`, { signal })
+      return response.status === 200
+    } catch {
+      return false
+    }
+  }, [])
+
   useEffect(() => {
     let isMounted = true
     let retryTimeout: NodeJS.Timeout
+    const abortController = new AbortController()
 
-    const checkHealth = async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
-      console.log('[v0] Checking health at:', `${apiUrl}/api/health`)
-      try {
-        const response = await fetch(`${apiUrl}/api/health`)
-        console.log('[v0] Health check response status:', response.status)
-        if (response.status === 200) {
-          // Start fade out animation
-          console.log('[v0] Health check passed, fading out splash screen')
-          setFadeOut(true)
-          // Wait for animation to complete before hiding
-          setTimeout(() => {
-            if (isMounted) {
-              console.log('[v0] Splash screen hidden, showing app')
-              setIsLoading(false)
-            }
-          }, 500)
-        } else {
-          // Retry after a delay if not 200
-          console.log('[v0] Health check failed, retrying in 1s')
-          retryTimeout = setTimeout(checkHealth, 1000)
-        }
-      } catch (error) {
-        // Retry after a delay on error
-        console.log('[v0] Health check error:', error, 'retrying in 1s')
-        retryTimeout = setTimeout(checkHealth, 1000)
+    const pollHealth = async () => {
+      const isHealthy = await checkHealth(abortController.signal)
+      
+      if (!isMounted) return
+
+      if (isHealthy) {
+        setFadeOut(true)
+        setTimeout(() => {
+          if (isMounted) setIsLoading(false)
+        }, 500)
+      } else {
+        retryTimeout = setTimeout(pollHealth, HEALTH_CHECK_INTERVAL)
       }
     }
 
-    checkHealth()
+    pollHealth()
 
     return () => {
       isMounted = false
+      abortController.abort()
       clearTimeout(retryTimeout)
     }
-  }, [])
+  }, [checkHealth])
 
   // Show splash screen while loading - don't render children at all
   if (isLoading) {
