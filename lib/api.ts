@@ -26,7 +26,12 @@ async function apiRequest<T>(
   }
 
   if (requiresAuth) {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
+    let token: string | null = null
+    try {
+      token = typeof window !== "undefined" ? localStorage.getItem("token") : null
+    } catch {
+      // localStorage access denied
+    }
     if (token) {
       ;(headers as Record<string, string>)["Authorization"] = `Bearer ${token}`
     }
@@ -40,8 +45,12 @@ async function apiRequest<T>(
   // Handle 401 Unauthorized - clear auth and redirect
   if (response.status === 401) {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
+      try {
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+      } catch {
+        // localStorage access denied
+      }
       window.location.href = "/"
     }
     throw new ApiError("Session expired. Please login again.", 401)

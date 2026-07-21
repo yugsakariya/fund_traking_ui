@@ -35,31 +35,39 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen bg-premium noise-overlay flex flex-col items-center justify-center px-4 relative">
+      {/* Ambient background orbs */}
+      <div className="absolute top-1/3 left-1/6 w-72 h-72 bg-amber-500/[0.04] rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/6 w-56 h-56 bg-indigo-500/[0.03] rounded-full blur-3xl" />
+      <div className="absolute top-1/6 right-1/3 w-40 h-40 bg-amber-400/[0.03] rounded-full blur-2xl" />
+
+      <div className="w-full max-w-sm relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Wallet className="w-8 h-8 text-gray-900" />
+        <div className="text-center mb-10 animate-fade-in-up">
+          <div className="relative inline-block mb-5">
+            <div className="absolute inset-0 bg-amber-400/20 rounded-2xl blur-xl scale-110" />
+            <div className="relative w-18 h-18 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto animate-pulse-glow">
+              <Wallet className="w-9 h-9 text-slate-900" />
+            </div>
           </div>
-          <h1 className="text-2xl font-bold text-white">Group Fund Tracker</h1>
-          <p className="text-gray-400 mt-2">Sign in to manage your group funds</p>
+          <h1 className="text-3xl font-bold gradient-text-white tracking-tight">Group Fund Tracker</h1>
+          <p className="text-slate-400 mt-2 text-sm tracking-wide">Sign in to manage your group funds</p>
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 rounded-xl px-4 py-3 text-red-400 text-sm" role="alert">
-              {error}
+            <div className="glass-card-light rounded-xl px-4 py-3 border-red-500/30 animate-scale-in" role="alert">
+              <p className="text-red-400 text-sm">{error}</p>
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
+            <label htmlFor="email" className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">
               Email
             </label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <div className="relative group">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-amber-400 transition-colors duration-300" />
               <input
                 id="email"
                 type="email"
@@ -67,18 +75,18 @@ export function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 autoComplete="email"
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
+                className="w-full glass-input rounded-xl pl-12 pr-4 py-4 text-white placeholder-slate-500 focus:outline-none transition-all"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2">
+            <label htmlFor="password" className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">
               Password
             </label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <div className="relative group">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-amber-400 transition-colors duration-300" />
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -86,13 +94,13 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 autoComplete="current-password"
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-12 pr-12 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
+                className="w-full glass-input rounded-xl pl-12 pr-12 py-4 text-white placeholder-slate-500 focus:outline-none transition-all"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-400 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors duration-300"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -103,11 +111,11 @@ export function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:bg-yellow-400/50 disabled:cursor-not-allowed text-gray-900 font-semibold py-4 rounded-xl transition-colors mt-6 flex items-center justify-center gap-2"
+            className="w-full btn-accent py-4 rounded-xl mt-8 flex items-center justify-center gap-2 text-base"
           >
             {isLoading ? (
               <>
-                <span className="w-5 h-5 border-2 border-gray-900/30 border-t-gray-900 rounded-full animate-spin" />
+                <span className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
                 Signing in...
               </>
             ) : (

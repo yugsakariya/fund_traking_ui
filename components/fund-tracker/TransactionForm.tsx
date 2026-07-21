@@ -54,19 +54,19 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
   }
 
   return (
-    <div className="bg-gray-800 rounded-3xl p-6">
-      <h2 className="text-lg font-semibold text-white mb-4">Add Transaction</h2>
+    <div className="glass-card rounded-2xl p-6 animate-fade-in-up">
+      <h2 className="text-base font-semibold gradient-text-white mb-5 tracking-tight">Add Transaction</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="bg-red-500/10 border border-red-500/50 rounded-xl px-4 py-3 text-red-400 text-sm" role="alert">
-            {error}
+          <div className="glass-card-light rounded-xl px-4 py-3 border-red-500/20 animate-scale-in" role="alert">
+            <p className="text-red-400 text-sm">{error}</p>
           </div>
         )}
 
         <div>
-          <label htmlFor="member" className="block text-sm font-medium text-gray-400 mb-2">
-            Member (Optional - defaults to you)
+          <label htmlFor="member" className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">
+            Member <span className="normal-case text-slate-500">(Optional)</span>
           </label>
           <div className="relative">
             <select
@@ -74,7 +74,7 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
               value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value ? Number(e.target.value) : "")}
               disabled={isSubmitting}
-              className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full glass-input rounded-xl px-4 py-3 text-white appearance-none focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="">Select member (defaults to {user?.name || "you"})</option>
               {members.map((member) => (
@@ -83,13 +83,13 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           </div>
         </div>
 
         <div>
-          <label htmlFor="amount" className="block text-sm font-medium text-gray-400 mb-2">
-            Amount (INR)
+          <label htmlFor="amount" className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">
+            Amount <span className="normal-case text-slate-500">(INR)</span>
           </label>
           <input
             id="amount"
@@ -100,22 +100,22 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
             min="1"
             step="0.01"
             disabled={isSubmitting}
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full glass-input rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">Type</label>
+          <label className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">Type</label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => setType("deposit")}
               disabled={isSubmitting}
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
                 type === "deposit"
-                  ? "bg-green-500/20 text-green-400 border-2 border-green-500"
-                  : "bg-gray-900 text-gray-400 border border-gray-700 hover:border-gray-600"
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                  : "glass-input text-slate-400 hover:text-slate-300 hover:border-slate-600"
               }`}
             >
               <Plus className="w-4 h-4" />
@@ -125,10 +125,10 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
               type="button"
               onClick={() => setType("withdrawal")}
               disabled={isSubmitting}
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
                 type === "withdrawal"
-                  ? "bg-red-500/20 text-red-400 border-2 border-red-500"
-                  : "bg-gray-900 text-gray-400 border border-gray-700 hover:border-gray-600"
+                  ? "bg-red-500/15 text-red-400 border border-red-500/40 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                  : "glass-input text-slate-400 hover:text-slate-300 hover:border-slate-600"
               }`}
             >
               <Minus className="w-4 h-4" />
@@ -138,8 +138,8 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
         </div>
 
         <div>
-          <label htmlFor="note" className="block text-sm font-medium text-gray-400 mb-2">
-            Note (Optional)
+          <label htmlFor="note" className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">
+            Note <span className="normal-case text-slate-500">(Optional)</span>
           </label>
           <input
             id="note"
@@ -149,18 +149,18 @@ export function TransactionForm({ onSubmit, isSubmitting = false, members }: Tra
             placeholder="Add a note..."
             disabled={isSubmitting}
             maxLength={200}
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full glass-input rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:bg-yellow-400/50 disabled:cursor-not-allowed text-gray-900 font-semibold py-4 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full btn-accent py-3.5 rounded-xl flex items-center justify-center gap-2 mt-2 cursor-pointer"
         >
           {isSubmitting ? (
             <>
-              <span className="w-5 h-5 border-2 border-gray-900/30 border-t-gray-900 rounded-full animate-spin" />
+              <span className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
               Adding...
             </>
           ) : (

@@ -21,17 +21,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check for existing token on mount
-    const storedToken = localStorage.getItem("token")
-    const storedUser = localStorage.getItem("user")
+    try {
+      const storedToken = localStorage.getItem("token")
+      const storedUser = localStorage.getItem("user")
 
-    if (storedToken && storedUser) {
-      try {
+      if (storedToken && storedUser) {
         setToken(storedToken)
         setUser(JSON.parse(storedUser))
-      } catch {
-        // Invalid stored data, clear it
+      }
+    } catch {
+      // localStorage access denied or invalid stored data — continue without auth
+      try {
         localStorage.removeItem("token")
         localStorage.removeItem("user")
+      } catch {
+        // Ignore — localStorage is fully inaccessible
       }
     }
     setIsLoading(false)
@@ -47,8 +51,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       role: response.user.role,
     }
 
-    localStorage.setItem("token", response.token)
-    localStorage.setItem("user", JSON.stringify(userData))
+    try {
+      localStorage.setItem("token", response.token)
+      localStorage.setItem("user", JSON.stringify(userData))
+    } catch {
+      // localStorage not available — session won't persist across refreshes
+    }
 
     setToken(response.token)
     setUser(userData)
@@ -58,8 +66,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Call logout API (fire and forget)
     authApi.logout().catch(() => {})
     
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
+    try {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+    } catch {
+      // Ignore — localStorage is inaccessible
+    }
     setToken(null)
     setUser(null)
   }

@@ -65,29 +65,32 @@ export function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="w-8 h-8 text-yellow-400 animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">Loading...</p>
+      <div className="min-h-screen bg-premium noise-overlay flex items-center justify-center">
+        <div className="text-center relative z-10 animate-fade-in">
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-amber-400/15 rounded-full blur-xl" />
+            <RefreshCw className="relative w-8 h-8 text-amber-400 animate-spin" />
+          </div>
+          <p className="text-slate-400 text-sm">Loading your dashboard...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-premium noise-overlay">
       <Header />
 
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 relative z-10 stagger-children">
         {(hasError || error) && (
-          <div className="bg-red-500/10 border border-red-500/50 rounded-xl px-4 py-3">
+          <div className="glass-card rounded-xl px-4 py-3 border-red-500/20 animate-scale-in">
             <div className="flex items-center justify-between">
               <p className="text-red-400 text-sm">
                 {error || "Failed to load data. Please try again."}
               </p>
               <button 
                 onClick={handleRefresh}
-                className="text-red-400 hover:text-red-300 transition-colors"
+                className="text-red-400 hover:text-red-300 transition-colors p-1"
                 aria-label="Retry"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -105,10 +108,12 @@ export function Dashboard() {
         {/* User-wise Ledger Button */}
         <button
           onClick={() => setShowUserWiseLedger(true)}
-          className="w-full flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 px-4 rounded-xl transition-colors border border-gray-700"
+          className="w-full flex items-center justify-center gap-2.5 glass-card hover:bg-white/[0.04] text-white font-medium py-3.5 px-4 rounded-xl transition-all duration-300 hover-lift cursor-pointer animate-fade-in-up"
         >
-          <Users className="w-5 h-5 text-yellow-400" />
-          View User-wise Ledger
+          <div className="w-8 h-8 bg-amber-400/10 rounded-lg flex items-center justify-center">
+            <Users className="w-4 h-4 text-amber-400" />
+          </div>
+          <span className="text-sm">View User-wise Ledger</span>
         </button>
         
         <TransactionForm 

@@ -10,8 +10,11 @@ function AppContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <Spinner className="w-8 h-8 text-yellow-400" />
+      <div className="min-h-screen bg-premium noise-overlay flex items-center justify-center">
+        <div className="relative z-10">
+          <div className="absolute inset-0 bg-amber-400/15 rounded-full blur-xl" />
+          <Spinner className="relative w-8 h-8 text-amber-400" />
+        </div>
       </div>
     )
   }
